@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace ForumIpsum.Controllers
             var file = _context.Files
                 .SingleOrDefault(m => m.Id == id);
             if (file == null) return NotFound();
-            
+
             ViewBag.Folder = file.FolderId;
             return View(file);
         }
@@ -145,5 +146,6 @@ namespace ForumIpsum.Controllers
                 file.Id.ToString("N") + Path.GetExtension(file.Extension));
             return PhysicalFile(attachmentPath, _mimeMappingService.GetContentType(file.Extension), file.Name);
         }
+
     }
 }

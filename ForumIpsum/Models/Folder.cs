@@ -9,8 +9,8 @@ namespace ForumIpsum.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string ApplicationUserId { get; set; }
-        public IdentityUser ApplicationUser { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
         public Guid? FolderId { get; set; }

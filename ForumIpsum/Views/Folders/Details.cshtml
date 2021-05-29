@@ -13,7 +13,7 @@
                 continue;
             }
             <li>
-                <a asp-action="Details" asp-route-id="@it.Item1"> @it.Item2 /</a>
+                <a asp-action="Details" asp-route-id="@it.Item1"> @it.Item2</a>
             </li>
         }
     }
@@ -100,7 +100,7 @@
                 </a>
             </td>
             <td>
-                @file.GetType()
+                @file.Extension[1..].ToUpper()
             </td>
             <td>
                 @file.Size bytes
