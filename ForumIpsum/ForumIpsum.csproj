@@ -116,7 +116,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\attachments\" />
+    <Folder Include="wwwroot\files\" />
   </ItemGroup>
 
 </Project>

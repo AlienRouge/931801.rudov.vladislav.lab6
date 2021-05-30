@@ -70,7 +70,7 @@ namespace ForumIpsum.Controllers
             };
             file.Name ??= fileName;
 
-            var path = Path.Combine(_hostingEnvironment.WebRootPath, "attachments", file.Id.ToString("N") + fileExt);
+            var path = Path.Combine(_hostingEnvironment.WebRootPath, "files", file.Id.ToString("N") + fileExt);
 
             using (var fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
             {
@@ -129,9 +129,9 @@ namespace ForumIpsum.Controllers
                 .SingleOrDefault(e => e.Id == id);
             if (file == null) return NotFound();
 
-            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "attachments",
+            var filesPath = Path.Combine(_hostingEnvironment.WebRootPath, "files",
                 file.Id.ToString("N") + file.Extension);
-            return PhysicalFile(attachmentPath, GetContentType(file.Extension), file.Name + file.Extension);
+            return PhysicalFile(filesPath, GetContentType(file.Extension), file.Name + file.Extension);
         }
 
         public string GetContentType(string extension)
