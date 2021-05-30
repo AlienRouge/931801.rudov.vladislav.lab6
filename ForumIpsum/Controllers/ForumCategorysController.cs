@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ForumIpsum.Data;
-using Microsoft.EntityFrameworkCore;
 using ForumIpsum.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace Web_Forum.Controllers
+namespace ForumIpsum.Controllers
 {
     public class ForumCategorysController : Controller
     {
