@@ -4,19 +4,6 @@
     ViewBag.Title = "Delete file";
 }
 
-<ol class="breadcrumb breadcrumb-top">
-    <li>
-        <a href="#">Root</a>
-    </li>
-    <li>
-        <a href="#">Folder 1</a>
-    </li>
-    <li>
-        <a href="#">File 1</a>
-    </li>
-    <li class="active">Delete</li>
-</ol>
-
 <h2>Delete @Model.Name</h2>
 <div>
     <form asp-action="Delete" asp-route-id="@Model.Id">

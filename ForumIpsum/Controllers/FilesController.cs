@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ForumIpsum.Data;
 using ForumIpsum.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
 using System.IO;
@@ -17,11 +15,11 @@ namespace ForumIpsum.Controllers
     public class FilesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly MapService _mimeMappingService;
 
         public FilesController(ApplicationDbContext context,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             MapService mimeMappingService)
         {
             _context = context;
@@ -59,10 +57,8 @@ namespace ForumIpsum.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Guid id, FileViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Details", "Folders", new {id = id});
-            }
+            if (!ModelState.IsValid) return RedirectToAction("Details", "Folders", new {id});
+            
 
             var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.FilePath.ContentDisposition)
                 .FileName.Trim('"'));
@@ -86,7 +82,7 @@ namespace ForumIpsum.Controllers
 
             _context.Files.Add(file);
             _context.SaveChanges();
-            return this.RedirectToAction("Details", "Folders", new {id = id});
+            return RedirectToAction("Details", "Folders", new {id});
         }
 
 
@@ -100,15 +96,12 @@ namespace ForumIpsum.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, FileViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
+            if (!ModelState.IsValid) return View(model);
+            
             var file = _context.Files.SingleOrDefault(e => e.Id == id);
             file.Name = model.Name;
             _context.SaveChanges();
-            return RedirectToAction("Details", "Files", new {id = id});
+            return RedirectToAction("Details", "Files", new {id});
         }
 
         public async Task<IActionResult> Delete(Guid? id)
@@ -118,11 +111,8 @@ namespace ForumIpsum.Controllers
             var file = await _context.Files
                 .Include(f => f.Folder)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (file == null)
-            {
-                return NotFound();
-            }
-
+            if (file == null) return NotFound();
+            
             return View(file);
         }
 
@@ -140,8 +130,8 @@ namespace ForumIpsum.Controllers
         {
             var file = _context.Files
                 .SingleOrDefault(e => e.Id == id);
-            if (file == null)
-                return NotFound();
+            if (file == null) return NotFound();
+
             var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "attachments",
                 file.Id.ToString("N") + Path.GetExtension(file.Extension));
             return PhysicalFile(attachmentPath, _mimeMappingService.GetContentType(file.Extension), file.Name);

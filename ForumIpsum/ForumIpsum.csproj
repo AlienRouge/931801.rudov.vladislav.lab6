@@ -58,8 +58,8 @@
     <None Include="Views\Files\Details.cshtml" />
     <None Include="Views\Files\Edit.cshtml" />
     <None Include="Views\Files\Index.cshtml" />
-    <None Include="Views\Folders\Create.cshtml" />
-    <None Include="Views\Folders\Create2.cshtml" />
+    <None Include="Views\Folders\CreateFirst.cshtml" />
+    <None Include="Views\Folders\CreateNext.cshtml" />
     <None Include="Views\Folders\Delete.cshtml" />
     <None Include="Views\Folders\Details.cshtml" />
     <None Include="Views\Folders\Edit.cshtml" />

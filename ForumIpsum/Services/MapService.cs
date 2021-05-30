@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.StaticFiles;
+﻿using Microsoft.AspNetCore.StaticFiles;
 
 namespace ForumIpsum.Services
 {

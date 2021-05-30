@@ -39,13 +39,13 @@ namespace ForumIpsum.Controllers
             var folder = _context.Folders.Include(e => e.Files).Include(e => e.Folders)
                 .SingleOrDefault(e => e.Id == id);
             ViewBag.Path = GetPath(id);
-            ViewBag.Can = Conform(id);
+            ViewBag.Can = GetCount(id);
 
             return View(folder);
         }
 
 
-        public IActionResult Create()
+        public IActionResult CreateFirst()
         {
             var model = new FolderViewModel();
             return View(model);
@@ -54,7 +54,7 @@ namespace ForumIpsum.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(FolderViewModel model)
+        public IActionResult CreateFirst(FolderViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -69,22 +69,21 @@ namespace ForumIpsum.Controllers
         }
 
 
-        public IActionResult Create2(Guid? id)
+        public IActionResult CreateNext(Guid? id)
         {
             var model = new FolderViewModel {FolderId = id};
+
+            ViewBag.Path = GetPath(id);
             return View(model);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create2(FolderViewModel model, Guid? id)
+        public IActionResult CreateNext(FolderViewModel model, Guid? id)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
+            if (!ModelState.IsValid) return View(model);
+            
             var folder = new Folder
             {
                 FolderId = id,
@@ -100,11 +99,8 @@ namespace ForumIpsum.Controllers
 
         public IActionResult Edit(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            
             ViewBag.Id = id;
             return View(new FolderViewModel());
         }
@@ -113,12 +109,10 @@ namespace ForumIpsum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(FolderViewModel model, Guid? id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
 
+        {
+            if (!ModelState.IsValid) return View(model);
+            
             var folder = _context.Folders.SingleOrDefault(e => e.Id == id);
             folder.Name = model.Name;
             _context.SaveChanges();
@@ -130,11 +124,8 @@ namespace ForumIpsum.Controllers
 
         public IActionResult Delete(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            
             var folder = _context.Folders.Include(e => e.Folders).Include(e => e.Files)
                 .SingleOrDefault(e => e.Id == id);
             return View(folder);
@@ -158,27 +149,26 @@ namespace ForumIpsum.Controllers
         private List<Tuple<Guid?, string>> GetPath(Guid? id)
         {
             var folder = _context.Folders.SingleOrDefault(e => e.Id == id);
-            var root = new List<Tuple<Guid?, string>> {new Tuple<Guid?, string>(id, folder.Name)};
-            while (folder.FolderId != null)
+            var root = new List<Tuple<Guid?, string>> {new Tuple<Guid?, string>(id, folder?.Name)};
+            while (folder?.FolderId != null)
             {
                 folder = _context.Folders.SingleOrDefault(e => e.Id == folder.FolderId);
-                root.Add(new Tuple<Guid?, string>(folder.Id, folder.Name));
+                root.Add(new Tuple<Guid?, string>(folder?.Id, folder?.Name));
             }
 
             root.Reverse();
             return root;
         }
 
-        private bool Conform(Guid? id)
+        private bool GetCount(Guid? id)
         {
             var folder = _context.Folders.SingleOrDefault(e => e.Id == id);
             var count = 0;
-            while (folder.FolderId != null)
+            while (folder?.FolderId != null)
             {
                 folder = _context.Folders.SingleOrDefault(e => e.Id == folder.FolderId);
                 count++;
             }
-
             return count == 0;
         }
     }
