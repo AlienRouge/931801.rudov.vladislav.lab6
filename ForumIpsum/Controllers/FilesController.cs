@@ -8,7 +8,7 @@ using ForumIpsum.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
 using System.IO;
-using ForumIpsum.Services;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ForumIpsum.Controllers
 {
@@ -16,15 +16,12 @@ namespace ForumIpsum.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly MapService _mimeMappingService;
 
         public FilesController(ApplicationDbContext context,
-            IWebHostEnvironment hostingEnvironment,
-            MapService mimeMappingService)
+            IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
-            _mimeMappingService = mimeMappingService;
         }
 
         public async Task<IActionResult> Index()
@@ -133,9 +130,14 @@ namespace ForumIpsum.Controllers
             if (file == null) return NotFound();
 
             var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "attachments",
-                file.Id.ToString("N") + Path.GetExtension(file.Extension));
-            return PhysicalFile(attachmentPath, _mimeMappingService.GetContentType(file.Extension), file.Name);
+                file.Id.ToString("N") + file.Extension);
+            return PhysicalFile(attachmentPath, GetContentType(file.Extension), file.Name + file.Extension);
         }
 
+        public string GetContentType(string extension)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            return provider.TryGetContentType($"file.{extension}", out var result) ? result : "application/unknown";
+        }
     }
 }
