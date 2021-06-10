@@ -29,9 +29,5 @@ namespace ForumIpsum.Controllers
             return View();
         }
 
-        public IActionResult SingleTopic()
-        {
-            return View();
-        }
     }
 }

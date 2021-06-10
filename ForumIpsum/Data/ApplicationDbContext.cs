@@ -12,6 +12,9 @@ namespace ForumIpsum.Data
         public DbSet<Folder> Folders { get; set; }
 
         public DbSet<File> Files { get; set; }
+
+        public DbSet<TopicModel> Topics { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

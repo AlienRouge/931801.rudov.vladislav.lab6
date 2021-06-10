@@ -1,0 +1,49 @@
+﻿@model ForumIpsum.Models.TopicModel
+
+@{
+    ViewData["Title"] = "Edit Reply";
+}
+
+<h2>Edit</h2>
+
+<h4>Reply</h4>
+<hr/>
+<div class="blog-post-editor">
+    <form asp-action="Edit">
+        <div class="form-horizontal">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group">
+                <b>
+                    <label asp-for="Title" class="col-md-2 control-label"></label>
+                </b>
+                <div class="col-md-10">
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <b>
+                    <label asp-for="Text" class="col-md-2 control-label"></label>
+                </b>
+                <div class="col-md-10">
+                    <textarea asp-for="Text" class="form-control"></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Edit" class="btn btn-dark" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Topic</a>
+</div>

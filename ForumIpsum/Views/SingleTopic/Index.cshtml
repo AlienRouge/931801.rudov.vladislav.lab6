@@ -1,0 +1,92 @@
+﻿@model IEnumerable<ForumIpsum.Models.TopicModel>
+
+@{
+    ViewData["Title"] = "SingleTopic";
+}
+
+<h2>First topic</h2>
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create">Reply</a>
+        | <a href="#">Edit</a>
+        | <a href="#">Delete</a>
+        | <a href="#">Back to Forum 1</a>
+    </p>
+}
+
+@foreach (var item in Model.OrderBy(x => x.Id))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div>
+                @Html.DisplayFor(modelItem => item.Author),
+                @Html.DisplayFor(modelItem => item.CreateDate)
+                @item.GetEditDate()
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div style="float: right">
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        | <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        | <a asp-action="Attach" asp-route-id="@item.Id">Attach</a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="forum-message-text">
+                <b style="font-size: 16px">@Html.DisplayFor(modelItem => item.Title)</b><br/>
+                @Html.DisplayFor(modelItem => item.Text)
+            </div>
+            @if (item.Image1 != null)
+            {
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img style='width: 300px; height: 300px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(item.Image1))" alt="Image1"/>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="caption">
+                            <p>
+                                <a class="btn btn-sm btn-danger" asp-action="DeleteImg" asp-route-id="@item.Id" asp-route-imgIndex="1">Delete</a>
+                            </p>
+                        </div>
+                    }
+                </div>
+            }
+            @if (item.Image2 != null)
+            {
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img style='width: 300px; height: 300px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(item.Image2))" alt="Image2"/>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="caption">
+                            <p>
+                                <a class="btn btn-sm btn-danger" asp-action="DeleteImg" asp-route-id="@item.Id" asp-route-imgIndex="2">Delete</a>
+                            </p>
+                        </div>
+                    }
+                </div>
+            }
+            @if (item.Image3 != null)
+            {
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img style='width: 300px; height: 300px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(item.Image3))" alt="Image3"/>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="caption">
+                            <p>
+                                <a class="btn btn-sm btn-danger" asp-action="DeleteImg" asp-route-id="@item.Id" asp-route-imgIndex="3">Delete</a>
+                            </p>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
